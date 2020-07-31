@@ -35,7 +35,7 @@ namespace AluguelCarro
             { 
                 opcoes.Cookie.HttpOnly = true;
                 opcoes.ExpireTimeSpan = TimeSpan.FromMinutes(50);
-                opcoes.LoginPath = "Usuarios/Login";
+                opcoes.LoginPath = "/Usuarios/Login";
                 opcoes.SlidingExpiration = true;
             });
             services.Configure<IdentityOptions>(opcoes =>
