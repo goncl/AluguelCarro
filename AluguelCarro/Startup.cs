@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AluguelCarro.Models;
+using AluguelCarro.AcessoDados.Interfaces;
+using AluguelCarro.AcessoDados.Repositorios;
 
 namespace AluguelCarro
 {
@@ -47,6 +49,10 @@ namespace AluguelCarro
                 opcoes.Password.RequiredLength = 6;
                 opcoes.Password.RequiredUniqueChars = 1;
             });
+
+            services.AddScoped<INivelAcessoRepositorio, NivelAcessoRepositorio>();
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

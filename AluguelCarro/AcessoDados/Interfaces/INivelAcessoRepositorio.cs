@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AluguelCarro.AcessoDados.Interfaces
 {
-    public interface INivelAcesso : IRepositorioGenerico<NiveisAcesso>
+    public interface INivelAcessoRepositorio : IRepositorioGenerico<NiveisAcesso>
     {
         Task<bool> NivelAcessoExiste(string nivelAcesso);
     }
