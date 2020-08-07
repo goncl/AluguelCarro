@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AluguelCarro.AcessoDados.Interfaces;
+using AluguelCarro.AcessoDados.Repositorios;
 using AluguelCarro.Models;
 using AluguelCarro.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +11,21 @@ using Microsoft.Extensions.Logging;
 
 namespace AluguelCarro.Controllers
 {
-    public class UsariosController : Controller
+    public class UsuariosController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        private readonly ILogger<IUsuarioRepositorio> _logger;
+        private readonly ILogger<UsuarioRepositorio> _logger;
 
-        public UsariosController(IUsuarioRepositorio usuarioRepositorio, ILogger<IUsuarioRepositorio> logger)
+        public UsuariosController(IUsuarioRepositorio usuarioRepositorio, ILogger<UsuarioRepositorio> logger)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _logger = logger;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            _logger.LogInformation("Listando informações");
+            return View(await _usuarioRepositorio.PegarUsuarioLogado(User));
         }
 
         public async Task<IActionResult> Registro()
