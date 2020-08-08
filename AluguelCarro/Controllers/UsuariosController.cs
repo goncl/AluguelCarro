@@ -6,6 +6,7 @@ using AluguelCarro.AcessoDados.Interfaces;
 using AluguelCarro.AcessoDados.Repositorios;
 using AluguelCarro.Models;
 using AluguelCarro.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -69,7 +70,7 @@ namespace AluguelCarro.Controllers
                     await _usuarioRepositorio.EfetuarLogin(usuario, false);
                     _logger.LogInformation("Usuário logado com sucesso");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Usuarios");
                 }
 
                 else
@@ -82,8 +83,55 @@ namespace AluguelCarro.Controllers
             }
 
             _logger.LogError("Informações de usuário inválidas");
-            return View(registro);
-             
+            return View(registro);            
         }
+
+        public async Task<IActionResult> Login()
+        {
+            if (User.Identity.IsAuthenticated)
+                await _usuarioRepositorio.EfetuarLogOut();
+
+            _logger.LogInformation("Entrando na página de login");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
+                _logger.LogInformation("Pegando o usuário pelo email");
+                var usuario = await _usuarioRepositorio.PegarUsuarioPeloEmail(login.Email);
+                PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
+
+                if (usuario != null)
+                {
+                    _logger.LogInformation("Verificando informções do usuário");
+                    if(passwordHasher.VerifyHashedPassword(usuario, usuario.PasswordHash, login.Senha) != PasswordVerificationResult.Failed)
+                    {
+                        _logger.LogInformation("Informações corretas. Logamdo usuário");
+                        await _usuarioRepositorio.EfetuarLogin(usuario, false);
+
+                        return RedirectToAction("Index", "Usuarios");
+                    }
+
+                    _logger.LogInformation("Informções inválidas");
+                    ModelState.AddModelError("", "Email e/ou senha inválidos");
+                }
+
+                _logger.LogInformation("Informções inválidas");
+                ModelState.AddModelError("", "Email e/ou senha inválidos");
+            }
+
+            return View(login);
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await _usuarioRepositorio.EfetuarLogOut();
+            return RedirectToAction("Login", "Usuarios");
+        }
+
     }
 }
