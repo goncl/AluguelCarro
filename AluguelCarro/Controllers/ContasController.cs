@@ -89,14 +89,5 @@ namespace AluguelCarro.Controllers
             ViewData["UsuarioId"] = new SelectList(await _contaRepositorio.PegarTodos(), "Id", "Email", conta.UsuarioId);
             return View(conta);
         }
-
-        [HttpPost]
-        public async Task<JsonResult> Delete(int id)
-        {
-            _logger.LogInformation("Excluindo conta");
-            await _contaRepositorio.Excluir(id);
-            _logger.LogInformation("Conta excluida");
-            return Json("Conta Excluida");
-        }
     }
 }

@@ -24,7 +24,7 @@ namespace AluguelCarro.AcessoDados.Repositorios
 
         public new async Task<IEnumerable<Conta>> PegarTodos()
         {
-            return await _contexto.Contas.Include(c => c.UsuarioId).ToListAsync();
+            return await _contexto.Contas.Include(c => c.Usuario).ToListAsync();
         }
     }
 }
