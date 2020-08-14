@@ -1,53 +1,65 @@
 ﻿@model IEnumerable<AluguelCarro.Models.Carro>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Carros cadastrados";
+    var controller = "Carros";
 }
 
-<h1>Index</h1>
+<h3 class="titulo">
+    <i class="fas fa-car fa-lg"></i> &nbsp; Carros cadastrados &nbsp;
+    <a asp-action="Create" asp-controller="Carros" class="btn btn-outline-secondary btn-lg" data-toggle="tooltip" data-placement="right" title="Novo carro">
+        <i class="fas fa-plus-circle"></i>
+    </a>
+</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Marca)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Foto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrecoDiaria)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Marca)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Foto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrecoDiaria)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CarroId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CarroId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarroId">Delete</a>
-            </td>
-        </tr>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-4">
+            <div class="cartoes">
+                <div class="card">
+                    <img src="@Url.Content(item.Foto)" class="card-img-top img-fluid" />
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Marca - @item.Nome</h5>
+                        <h5><span class="badge-secondary">R$ @item.PrecoDiaria,00</span></h5>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Edit" asp-controller="Carros" asp-route-id="@item.CarroId" class="btn btn-outline-info">Atualizar</a>
+                        <a onclick="ConfirmarExclusao(@item.CarroId, '@item.Nome', '@controller')" class="btn btn-outline-danger">Excluir</a>
+                        <a asp-action="Aluguar" asp-controller="Alugueis" asp-route-CarroId="@item.CarroId" asp-route-PrecoDiaria="@item.PrecoDiaria" class="btn btn-outline-info btn-block">Alugar veiculo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<partial name="_ModalExclusao" />
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+
+        function ConfirmarExclusao(id, nome, controller) {
+            $(".Nome").html(nome);
+
+            $(".modal").modal("show");
+
+            $(".btnExcluir").on('click', function () {
+                var url = "/" + controller + "/Delete/";
+
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    data: { id: id },
+                    success: function () {
+                        alert("Registro excuido com sucesso!");
+                        location.reload();
+                    }
+                })
+            })
+        }
+    </script>
 }
-    </tbody>
-</table>
