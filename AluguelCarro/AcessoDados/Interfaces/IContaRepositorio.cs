@@ -11,5 +11,7 @@ namespace AluguelCarro.AcessoDados.Interfaces
         new Task<IEnumerable<Conta>> PegarTodos();
 
         int PegarSaldoPeloId(string Id);
+
+        Task<Conta> PegarSaldoPeloUsuarioId(string id);
     }
 }

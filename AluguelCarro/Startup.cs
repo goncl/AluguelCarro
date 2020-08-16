@@ -55,6 +55,7 @@ namespace AluguelCarro
             services.AddScoped<IEnderecoRepositorio, EnderecoRepositorio>();
             services.AddScoped<IContaRepositorio, ContaRepositorio>();
             services.AddScoped<ICarroRepositorio, CarroRepositorio>();
+            services.AddScoped<IAluguelRepositorio, AluguelRepositorio>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

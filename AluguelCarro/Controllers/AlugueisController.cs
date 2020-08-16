@@ -25,7 +25,7 @@ namespace AluguelCarro.Controllers
             _logger = logger;
         }
 
-        public IActionResult Aluguel(int carroId, int precoDiaria)
+        public IActionResult Alugar(int carroId, int precoDiaria)
         {
             _logger.LogInformation("Começando o aluguel do carro");
 
@@ -37,6 +37,7 @@ namespace AluguelCarro.Controllers
 
             return View(aluguel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -74,7 +75,7 @@ namespace AluguelCarro.Controllers
                     _logger.LogInformation("Reserva feita");
 
                     _logger.LogInformation("Atualizando saldo do usuario");
-                    var saldoUsuario = await _contaRepositorio.PegarPeloId(usuario.Id);
+                    var saldoUsuario = await _contaRepositorio.PegarSaldoPeloUsuarioId(usuario.Id);
                     saldoUsuario.Saldo = saldoUsuario.Saldo - aluguel.PrecoTotal;
                     await _contaRepositorio.Atualizar(saldoUsuario);
                     _logger.LogInformation("Saldo atualizado");
