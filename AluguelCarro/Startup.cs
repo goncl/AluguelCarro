@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using AluguelCarro.Models;
 using AluguelCarro.AcessoDados.Interfaces;
 using AluguelCarro.AcessoDados.Repositorios;
+using AluguelCarro.Servicos;
 
 namespace AluguelCarro
 {
@@ -56,6 +57,9 @@ namespace AluguelCarro
             services.AddScoped<IContaRepositorio, ContaRepositorio>();
             services.AddScoped<ICarroRepositorio, CarroRepositorio>();
             services.AddScoped<IAluguelRepositorio, AluguelRepositorio>();
+
+            services.Configure<ConfiguracoesEmail>(Configuration.GetSection("ConfiguracoesEmail"));
+            services.AddScoped<IEmail, Email>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
