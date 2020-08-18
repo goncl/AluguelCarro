@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AluguelCarro.AcessoDados.Interfaces;
 using AluguelCarro.Models;
+using AluguelCarro.Servicos;
 using AluguelCarro.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,13 +17,15 @@ namespace AluguelCarro.Controllers
         private readonly IContaRepositorio _contaRepositorio;
         private readonly IAluguelRepositorio _aluguelRepositorio;
         private readonly ILogger<AlugueisController> _logger;
+        private readonly IEmail _email;
 
-        public AlugueisController(IUsuarioRepositorio usuarioRepositorio, IContaRepositorio contaRepositorio, IAluguelRepositorio aluguelRepositorio, ILogger<AlugueisController> logger)
+        public AlugueisController(IUsuarioRepositorio usuarioRepositorio, IContaRepositorio contaRepositorio, IAluguelRepositorio aluguelRepositorio, ILogger<AlugueisController> logger, IEmail email)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _contaRepositorio = contaRepositorio;
             _aluguelRepositorio = aluguelRepositorio;
             _logger = logger;
+            _email = email;
         }
 
         public IActionResult Alugar(int carroId, int precoDiaria)
@@ -71,6 +74,14 @@ namespace AluguelCarro.Controllers
                         PrecoTotal = aluguel.PrecoTotal
                     };
 
+                    _logger.LogInformation("Enviando email com detalhes da reserva");
+                    string assunto = "Reserva concluida com sucesso";
+
+                    string mensagem = string.Format("seu veiculo já o aguarda. Você poderá pegá-lo dia {0}" +
+                        " e deverá devolve-lo dia {1}. O preço será R${2},00. Divirta-se !!! ", aluguel.Inicio, aluguel.Fim, aluguel.PrecoTotal);
+
+                    await _email.EnviarEmail(usuario.Email, assunto, mensagem);
+                    
                     await _aluguelRepositorio.Inserir(a);
                     _logger.LogInformation("Reserva feita");
 
