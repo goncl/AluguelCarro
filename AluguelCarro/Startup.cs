@@ -73,6 +73,7 @@ namespace AluguelCarro
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
+            app.UseStatusCodePagesWithReExecute("/Erros/{0}");
            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -81,6 +82,7 @@ namespace AluguelCarro
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

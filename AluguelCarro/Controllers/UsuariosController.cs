@@ -6,12 +6,14 @@ using AluguelCarro.AcessoDados.Interfaces;
 using AluguelCarro.AcessoDados.Repositorios;
 using AluguelCarro.Models;
 using AluguelCarro.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AluguelCarro.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -29,6 +31,7 @@ namespace AluguelCarro.Controllers
             return View(await _usuarioRepositorio.PegarUsuarioLogado(User));
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Registro()
         {
             if (User.Identity.IsAuthenticated)
@@ -38,6 +41,7 @@ namespace AluguelCarro.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registro(RegistroViewModel registro)
@@ -86,6 +90,7 @@ namespace AluguelCarro.Controllers
             return View(registro);            
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Login()
         {
             if (User.Identity.IsAuthenticated)
@@ -95,6 +100,7 @@ namespace AluguelCarro.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login)

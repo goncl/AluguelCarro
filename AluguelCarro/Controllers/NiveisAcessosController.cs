@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AluguelCarro.Models;
 using AluguelCarro.AcessoDados.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AluguelCarro.Controllers
 {
+    [Authorize]
     public class NiveisAcessosController : Controller
     {
         private readonly INivelAcessoRepositorio _nivelAcessoRepositorio;

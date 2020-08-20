@@ -6,11 +6,13 @@ using AluguelCarro.AcessoDados.Interfaces;
 using AluguelCarro.Models;
 using AluguelCarro.Servicos;
 using AluguelCarro.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AluguelCarro.Controllers
 {
+    [Authorize]
     public class AlugueisController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;

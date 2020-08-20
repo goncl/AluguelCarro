@@ -24,9 +24,15 @@
                         <h5><span class="badge-secondary">R$ @item.PrecoDiaria,00</span></h5>
                     </div>
                     <div class="card-footer">
+                         @if (User.IsInRole("Administrador"))
+                         {
                         <a asp-action="Edit" asp-controller="Carros" asp-route-id="@item.CarroId" class="btn btn-outline-info">Atualizar</a>
                         <a onclick="ConfirmarExclusao(@item.CarroId, '@item.Nome', '@controller')" class="btn btn-outline-danger">Excluir</a>
-                        <a asp-action="Alugar" asp-controller="Alugueis" asp-route-CarroId="@item.CarroId" asp-route-PrecoDiaria="@item.PrecoDiaria" class="btn btn-outline-info btn-block">Alugar veiculo</a>
+                         }
+                         else
+                         {
+                             <a asp-action="Alugar" asp-controller="Alugueis" asp-route-CarroId="@item.CarroId" asp-route-PrecoDiaria="@item.PrecoDiaria" class="btn btn-outline-info btn-block">Alugar veiculo</a>
+                         }
                     </div>
                 </div>
             </div>
