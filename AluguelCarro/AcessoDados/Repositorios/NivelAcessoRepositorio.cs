@@ -23,5 +23,14 @@ namespace AluguelCarro.AcessoDados.Repositorios
         {
             return await _gerenciadorNiveisAcesso.RoleExistsAsync(nivelAcesso);
         }
+
+        public new async Task Atualizar(NiveisAcesso niveisAcesso)
+        {
+            var nv = await _contexto.NiveisAcessos.FindAsync(niveisAcesso.Id);
+            nv.Name = niveisAcesso.Name;
+            nv.NormalizedName = niveisAcesso.NormalizedName;
+            nv.Descricao = niveisAcesso.Descricao;
+            await _gerenciadorNiveisAcesso.UpdateAsync(nv);
+        }
     }
 }
